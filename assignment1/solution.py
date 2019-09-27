@@ -1,5 +1,7 @@
 import numpy as np
 
+iris = np.loadtxt('iris.txt')
+
 ######## DO NOT MODIFY THIS FUNCTION ########
 def draw_rand_label(x, label_list):
     seed = abs(np.sum(x))
@@ -14,9 +16,13 @@ def draw_rand_label(x, label_list):
 class Q1:
 
     def feature_means(self, iris):
+        self.iris = iris
+        return np.transpose(np.mean(np.transpose(iris), axis=1)[0:4])
         pass
 
     def covariance_matrix(self, iris):
+        self.iris = iris
+        return np.cov(np.transpose(iris)[0:4])
         pass
 
     def feature_means_class_1(self, iris):
