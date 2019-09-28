@@ -55,8 +55,31 @@ class SoftRBFParzen:
     def compute_predictions(self, test_data):
         pass
 
-
+# Problematic with AutoGrading, already emailed prof, skip for now
 def split_dataset(iris):
+    training_set = np.zeros(shape=(90, 5))
+    validation_set = np.zeros(shape=(30, 5))
+    test_set = np.zeros(shape=(30, 5))
+    i = 0
+    j = 0
+    k = 0
+    m = 0
+    while i < 150:
+        if i % 5 == 0 or i % 5 == 1 or i % 5 == 2:
+            training_set[j] = iris[i]
+            j += 1
+        elif i % 5 == 3:
+            validation_set[k] = iris[i]
+            k += 1
+        elif i % 5 == 4:
+            test_set[m] = iris[i]
+            m += 1
+        i += 1
+
+    result = (training_set, validation_set, test_set)
+
+    return result
+
     pass
 
 
