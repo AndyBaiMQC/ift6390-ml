@@ -25,10 +25,27 @@ class Q1:
         return np.cov(np.transpose(iris)[0:4])
         pass
 
+    # hidden test...
     def feature_means_class_1(self, iris):
+        self.iris = iris
+        result = np.zeros(shape=(np.shape(iris)))
+        i = 0
+        for num in np.argsort(iris[:, 4]):
+            if i < len(iris):
+                result[i] = iris[num]
+            i = i + 1
+        return np.transpose(np.mean(np.transpose(result[0:round(len(iris)/3)]), axis=1)[0:4])
         pass
 
     def covariance_matrix_class_1(self, iris):
+        self.iris = iris
+        result = np.zeros(shape=(np.shape(iris)))
+        i = 0
+        for num in np.argsort(iris[:, 4]):
+            if i < len(iris):
+                result[i] = iris[num]
+            i = i + 1
+        return np.cov(np.transpose(result[0:round(len(iris)/3)])[0:4])
         pass
 
 
@@ -55,7 +72,6 @@ class SoftRBFParzen:
     def compute_predictions(self, test_data):
         pass
 
-# Problematic with AutoGrading, already emailed prof, skip for now
 def split_dataset(iris):
     training_set = np.zeros(shape=(90, 5))
     validation_set = np.zeros(shape=(30, 5))
@@ -64,7 +80,7 @@ def split_dataset(iris):
     j = 0
     k = 0
     m = 0
-    while i < 150:
+    while i < len(iris):
         if i % 5 == 0 or i % 5 == 1 or i % 5 == 2:
             training_set[j] = iris[i]
             j += 1
@@ -75,11 +91,8 @@ def split_dataset(iris):
             test_set[m] = iris[i]
             m += 1
         i += 1
-
     result = (training_set, validation_set, test_set)
-
     return result
-
     pass
 
 
