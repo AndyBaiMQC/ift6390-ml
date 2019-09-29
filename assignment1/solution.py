@@ -70,6 +70,7 @@ class Q1:
         
         return np.cov(class_1_feature.T)
 
+
 class HardParzen:
     def __init__(self, h):
         self.h = h
@@ -80,8 +81,7 @@ class HardParzen:
         self.train_label = train_labels
         
         return
-    
-    
+     
     
     def is_in_the_window(self, center, inputs):
         def cal_euclidean_distance(x, y):
@@ -105,7 +105,6 @@ class HardParzen:
             # get the label list of its neighbors
             neighbor_labels = self.train_label[is_neighbors]
             
-            
             # cal the counts of each class
             uniqued, counts = np.unique(neighbor_labels, return_counts=True)
             
@@ -114,8 +113,6 @@ class HardParzen:
         
         return np.array(predictions)
     
-    
-
 
 class SoftRBFParzen:
     def __init__(self, sigma):
@@ -137,8 +134,7 @@ class SoftRBFParzen:
         
         # cal kernel density estimates
         def cal_kde(x, mean, sigma):
-#             former = 1. / ( (2*np.pi)**(mean.shape[-1]/2) * np.linalg.det(sigma)**0.5 )
-#             latter = np.exp( -0.5 * (x-mean).dot(np.linalg.inv(sigma)).dot((x-mean).T) )
+
             former = 1. / ( (2*np.pi)**(self.dim/2) * sigma**self.dim )
             latter = np.exp( -0.5 * cal_euclidean_distance(x, mean)**2 / sigma**2 )
             
@@ -164,14 +160,15 @@ class SoftRBFParzen:
     
 
 def split_dataset(iris):
-    training_set = np.zeros(shape=(90, 5))
-    validation_set = np.zeros(shape=(30, 5))
-    test_set = np.zeros(shape=(30, 5))
-    i = 0
-    j = 0
-    k = 0
-    m = 0
-    while i < len(iris):
+
+    training_set = np.zeros(shape=(len(iris), 5))
+    validation_set = np.zeros(shape=(len(iris), 5))
+    test_set = np.zeros(shape=(len(iris), 5)) 
+    
+    j = 0;
+    k = 0;
+    l = 0;
+    for i in range(0, len(iris)):
         if i % 5 == 0 or i % 5 == 1 or i % 5 == 2:
             training_set[j] = iris[i]
             j += 1
@@ -179,11 +176,15 @@ def split_dataset(iris):
             validation_set[k] = iris[i]
             k += 1
         elif i % 5 == 4:
-            test_set[m] = iris[i]
-            m += 1
-        i += 1
-    result = (training_set, validation_set, test_set)
-    return result
+            test_set[l] = iris[i]
+            l += 1
+
+
+    training_set = training_set[~np.all(training_set == 0, axis=1)]
+    validation_set = validation_set[~np.all(validation_set == 0, axis=1)]
+    test_set = test_set[~np.all(test_set == 0, axis=1)]
+
+    return (training_set, validation_set, test_set)
     pass
 
 
@@ -236,19 +237,7 @@ def get_test_errors(iris):
     sigma_star = sigmas[er_sp.argmin()]
     
     er_te = ErrorRate(tr_x, tr_y, te_x, te_y)
-    
-    
-    
-#     if (er_sp.argmin()==er_sp).sum()>1:
-        
-#         soft_results = []
-#         for ss in sigmas[er_sp==er_sp.argmin()]:
-#             soft_results.append(er_te.soft_parzen(ss))
-            
-#         return np.array([er_te.hard_parzen(h_star), min(soft_results)])
-#     print(h_star, sigma_star,er_hp, er_sp, h_star, sigma_star)
-    
-    
+
     
     results = np.array([er_te.hard_parzen(h_star), er_te.soft_parzen(sigma_star)])
     
